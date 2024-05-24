@@ -1,0 +1,84 @@
+{
+  "plan": [
+    {
+      "2024年五月": {
+        "第一周": [
+          {
+            "planName": "AI大模型工程师",
+            "source": "马士兵教育",
+            "schedule": "20%",
+            "target": "前六章",
+            "link": "https://www.mashibing.com/subject/167?activeNav=1",
+            "status": "待开始"
+          },
+          {
+            "planName": "樊登育儿书（唤醒孩子的内在成长）",
+            "source": "书",
+            "schedule": "30%",
+            "target": "通读一遍",
+            "link": "",
+            "status": "进行中"
+          }
+        ],
+        "第二周": [
+          {
+            "planName": "AI大模型工程师",
+            "source": "马士兵教育",
+            "schedule": "20%",
+            "target": "前六章",
+            "link": "https://www.mashibing.com/subject/167?activeNav=1",
+            "status": "待开始"
+          },
+          {
+            "planName": "樊登育儿书（唤醒孩子的内在成长）",
+            "source": "书",
+            "schedule": "30%",
+            "target": "通读一遍",
+            "link": "",
+            "status": "进行中"
+          }
+        ]
+      }
+    },
+    {
+      "2024年六月": {
+        "第一周": [
+          {
+            "planName": "AI大模型工程师",
+            "source": "马士兵教育",
+            "schedule": "20%",
+            "target": "前六章",
+            "link": "https://www.mashibing.com/subject/167?activeNav=1",
+            "status": "待开始"
+          },
+          {
+            "planName": "樊登育儿书（唤醒孩子的内在成长）",
+            "source": "书",
+            "schedule": "30%",
+            "target": "通读一遍",
+            "link": "",
+            "status": "进行中"
+          }
+        ],
+        "第二周": [
+          {
+            "planName": "AI大模型工程师",
+            "source": "马士兵教育",
+            "schedule": "20%",
+            "target": "前六章",
+            "link": "https://www.mashibing.com/subject/167?activeNav=1",
+            "status": "待开始"
+          },
+          {
+            "planName": "樊登育儿书（唤醒孩子的内在成长）",
+            "source": "书",
+            "schedule": "30%",
+            "target": "通读一遍",
+            "link": "",
+            "status": "进行中"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>超级计划</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
+      }
+      .sidebar {
+        width: 200px;
+        background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
+        color: white;
+        padding: 20px;
+        height: 100vh;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        overflow-y: auto;
+      }
+      .sidebar h2 {
+        margin-top: 20px;
+        font-size: 2.2em;
+        margin-bottom: 10px;
+        text-align: center;
+        border: #dad4ec 3px solid;
+        border-radius: 5px;
+      }
+      .sidebar ul {
+        list-style: none;
+        text-align: center;
+        padding: 10px;
+      }
+      .sidebar ul li {
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+      .sidebar ul li a {
+        margin: 10px;
+        padding: 3px;
+        color: white;
+        text-decoration: none;
+        background-color: #4caf50;
+        /* 圆角 */
+        border-radius: 5px;
+      }
+      .sidebar ul li ul {
+        list-style: none;
+        padding-left: 20px;
+      }
+      .container {
+        max-width: 75%;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        flex-grow: 1;
+        background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
+      }
+      .plan-group {
+        margin-bottom: 40px;
+        /* 加一个淡淡的背景色 */
+        background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+        /* 圆角 */
+        border-radius: 10px;
+        padding: 20px;
+      }
+      .plan-group h2 {
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        font-size: 1.5em;
+        color: #333;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border-radius: 10px;
+      }
+      th,
+      td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+      }
+      td {
+        background-image: linear-gradient(
+          to top,
+          #dad4ec 0%,
+          #dad4ec 1%,
+          #f3e7e9 100%
+        );
+      }
+      th {
+        width: 16.6%;
+        background-image: linear-gradient(
+          to top,
+          #f3e7e9 0%,
+          #e3eeff 99%,
+          #e3eeff 100%
+        );
+        color: #333;
+        font-weight: bold;
+        /* 左右居中 */
+      }
+      .progress-container {
+        position: relative;
+        height: 20px;
+        background-color: #f3f3f3;
+        border-radius: 10px;
+        overflow: hidden;
+        width: 100%;
+      }
+      .progress-bar {
+        height: 100%;
+        background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+        text-align: right;
+        padding-right: 5px;
+        box-sizing: border-box;
+        border-radius: 10px 0 0 10px;
+      }
+      .progress-text {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9em;
+        color: #000000;
+      }
+      .link {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        text-align: center;
+        text-decoration: none;
+        background-image: linear-gradient(60deg, #64b3f4 0%, #c2e59c 100%);
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: background-image 0.3s ease;
+      }
+
+      .link:hover {
+        background-image: linear-gradient(to right, #f83600 50%, #f9d423 150%);
+        text-decoration: none;
+      }
+      .status-plan {
+        display: inline-block;
+        padding: 2px 5px;
+        border-radius: 3px;
+        margin: auto 5px;
+        justify-content: center; /* 水平居中 */
+        align-items: center; /* 垂直居中 */
+        vertical-align: middle;
+        line-height: normal;
+      }
+      .status-not-started {
+        background-image: linear-gradient(60deg, #abecd6 0%, #fbed96 100%);
+      }
+      .status-in-progress {
+        background-image: linear-gradient(
+          to right,
+          #f78ca0 0%,
+          #f9748f 19%,
+          #fd868c 60%,
+          #fe9a8b 100%
+        );
+      }
+      .status-completed {
+        background-image: linear-gradient(120deg, #abecd6 0%, #96e6a1 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <h2>超级计划</h2>
+      <ul id="month-list"></ul>
+    </div>
+    <div class="container" id="plan-container">
+      <!-- Plans will be dynamically inserted here -->
+    </div>
+
+    <script>
+      const data = {
+        plan: [
+          {
+            "2024年五月": {
+              第一周: [
+                {
+                  planName: "AI大模型工程师",
+                  source: "马士兵教育",
+                  schedule: "20%",
+                  target: "前六章",
+                  link: "https://www.mashibing.com/subject/167?activeNav=1",
+                  status: "待开始",
+                },
+                {
+                  planName: "樊登育儿书（唤醒孩子的内在成长）",
+                  source: "书",
+                  schedule: "30%",
+                  target: "通读一遍",
+                  link: "",
+                  status: "进行中",
+                },
+              ],
+              第二周: [
+                {
+                  planName: "AI大模型工程师1111",
+                  source: "马士兵教育1111",
+                  schedule: "100%",
+                  target: "前八章",
+                  link: "https://www.mashibing.com/subject/167?activeNav=1",
+                  status: "已完成",
+                },
+                {
+                  planName: "樊登育儿书（唤醒孩子的内在成长）",
+                  source: "书",
+                  schedule: "30%",
+                  target: "通读一遍",
+                  link: "",
+                  status: "进行中",
+                },
+              ],
+            },
+          },
+          {
+            "2024年六月": {
+              第一周: [
+                {
+                  planName: "AI大模型工程师",
+                  source: "马士兵教育",
+                  schedule: "20%",
+                  target: "前六章",
+                  link: "https://www.mashibing.com/subject/167?activeNav=1",
+                  status: "待开始",
+                },
+                {
+                  planName: "樊登育儿书（唤醒孩子的内在成长）",
+                  source: "书",
+                  schedule: "30%",
+                  target: "通读一遍",
+                  link: "",
+                  status: "进行中",
+                },
+              ],
+              第二周: [
+                {
+                  planName: "AI大模型工程师",
+                  source: "马士兵教育",
+                  schedule: "20%",
+                  target: "前六章",
+                  link: "https://www.mashibing.com/subject/167?activeNav=1",
+                  status: "待开始",
+                },
+                {
+                  planName: "樊登育儿书（唤醒孩子的内在成长）",
+                  source: "书",
+                  schedule: "30%",
+                  target: "通读一遍",
+                  link: "",
+                  status: "进行中",
+                },
+              ],
+            },
+          },
+        ],
+      };
+
+      function createPlanElement(plan) {
+        const rowElement = document.createElement("tr");
+
+        const nameCell = document.createElement("td");
+        nameCell.textContent = plan.planName;
+        rowElement.appendChild(nameCell);
+
+        const sourceCell = document.createElement("td");
+        sourceCell.textContent = plan.source;
+        rowElement.appendChild(sourceCell);
+
+        const progressCell = document.createElement("td");
+        const progressContainer = document.createElement("div");
+        progressContainer.classList.add("progress-container");
+        const progressBar = document.createElement("div");
+        progressBar.classList.add("progress-bar");
+        progressBar.style.width = plan.schedule;
+        const progressText = document.createElement("div");
+        progressText.classList.add("progress-text");
+        progressText.textContent = plan.schedule;
+        progressBar.appendChild(progressText);
+        progressContainer.appendChild(progressBar);
+        progressCell.appendChild(progressContainer);
+        rowElement.appendChild(progressCell);
+
+        const targetCell = document.createElement("td");
+        targetCell.textContent = plan.target;
+        rowElement.appendChild(targetCell);
+
+        const statusCell = document.createElement("td");
+        statusCell.classList.add("plan-status");
+
+        const statusParagraph = document.createElement("p");
+        statusParagraph.classList.add("status-plan");
+        statusParagraph.textContent = plan.status;
+
+        switch (plan.status) {
+          case "待开始":
+            statusParagraph.classList.add("status-not-started");
+            break;
+          case "进行中":
+            statusParagraph.classList.add("status-in-progress");
+            break;
+          case "已完成":
+            statusParagraph.classList.add("status-completed");
+            break;
+        }
+
+        statusCell.appendChild(statusParagraph);
+        rowElement.appendChild(statusCell);
+
+        const linkCell = document.createElement("td");
+        if (plan.link) {
+          const linkElement = document.createElement("a");
+          linkElement.classList.add("link");
+          linkElement.href = plan.link;
+          linkElement.textContent = "查看详情";
+          linkElement.target = "_blank";
+          linkCell.appendChild(linkElement);
+        } else {
+          linkCell.textContent = "无链接";
+        }
+        rowElement.appendChild(linkCell);
+
+        return rowElement;
+      }
+
+      function groupPlansByStatus(plans) {
+        const groupedPlans = {
+          待开始: [],
+          进行中: [],
+          已完成: [],
+        };
+
+        plans.forEach((plan) => {
+          groupedPlans[plan.status].push(plan);
+        });
+
+        return groupedPlans;
+      }
+
+      function renderPlans(plans, container) {
+        container.innerHTML = "";
+
+        for (const status in plans) {
+          const statusGroup = plans[status];
+
+          const statusElement = document.createElement("div");
+          statusElement.classList.add("plan-group");
+
+          const statusHeader = document.createElement("h2");
+          statusHeader.textContent = status;
+          statusElement.appendChild(statusHeader);
+
+          const table = document.createElement("table");
+          const thead = document.createElement("thead");
+          const headerRow = document.createElement("tr");
+
+          ["计划名称", "来源", "进度", "目标", "状态", "链接"].forEach(
+            (text) => {
+              const th = document.createElement("th");
+              th.textContent = text;
+              headerRow.appendChild(th);
+            }
+          );
+
+          thead.appendChild(headerRow);
+          table.appendChild(thead);
+
+          const tbody = document.createElement("tbody");
+
+          statusGroup.forEach((plan) => {
+            const planElement = createPlanElement(plan);
+            tbody.appendChild(planElement);
+          });
+
+          table.appendChild(tbody);
+          statusElement.appendChild(table);
+
+          container.appendChild(statusElement);
+        }
+      }
+
+      const planContainer = document.getElementById("plan-container");
+      const monthList = document.getElementById("month-list");
+
+      data.plan.forEach((monthPlans, monthIndex) => {
+        for (const month in monthPlans) {
+          const monthGroup = monthPlans[month];
+
+          const monthElement = document.createElement("li");
+          const monthLink = document.createElement("a");
+          monthLink.textContent = month;
+          monthLink.href = "#";
+          monthLink.dataset.monthIndex = monthIndex;
+          monthElement.appendChild(monthLink);
+
+          const weekList = document.createElement("ul");
+
+          for (const week in monthGroup) {
+            const weekElement = document.createElement("li");
+            const weekLink = document.createElement("a");
+            weekLink.textContent = week;
+            weekLink.href = "#";
+            weekLink.dataset.monthIndex = monthIndex;
+            weekLink.dataset.week = week;
+            weekElement.appendChild(weekLink);
+            weekList.appendChild(weekElement);
+          }
+
+          monthElement.appendChild(weekList);
+          monthList.appendChild(monthElement);
+        }
+      });
+
+      monthList.addEventListener("click", (event) => {
+        const target = event.target;
+        if (target.tagName === "A") {
+          event.preventDefault();
+          const monthIndex = target.dataset.monthIndex;
+          const week = target.dataset.week;
+
+          const monthPlans = data.plan[monthIndex];
+          for (const month in monthPlans) {
+            const monthGroup = monthPlans[month];
+            if (week) {
+              const weekPlans = monthGroup[week];
+              const groupedPlans = groupPlansByStatus(weekPlans);
+              renderPlans(groupedPlans, planContainer);
+            } else {
+              let allPlans = [];
+              for (const week in monthGroup) {
+                allPlans = allPlans.concat(monthGroup[week]);
+              }
+              const groupedPlans = groupPlansByStatus(allPlans);
+              renderPlans(groupedPlans, planContainer);
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
