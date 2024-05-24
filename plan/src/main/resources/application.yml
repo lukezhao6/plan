@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: plan
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://47.108.53.111:3306/plan?useSSL=false&serverTimezone=UTC
+    username: plan
+    password: 111111
+server:
+  port: 8081
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: com.luke.plan.domain
+  configuration:
+    map-underscore-to-camel-case: true
