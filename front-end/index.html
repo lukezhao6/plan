@@ -353,11 +353,12 @@
           container.appendChild(statusElement);
         }
       }
-
       function renderPlanData(planData) {
+        //获取计划容器和月份列表
         const planContainer = document.getElementById("plan-container");
+        //获取计划数据中的计划数组
         const monthList = document.getElementById("month-list");
-
+        //遍历计划数据中的计划数组
         planData.plan.forEach((monthPlans, monthIndex) => {
           for (const month in monthPlans) {
             const monthGroup = monthPlans[month];
@@ -386,7 +387,7 @@
             monthList.appendChild(monthElement);
           }
         });
-
+        //获取第一个月的计划数据
         monthList.addEventListener("click", (event) => {
           const target = event.target;
           if (target.tagName === "A") {
