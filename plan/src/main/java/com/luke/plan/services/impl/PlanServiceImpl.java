@@ -14,6 +14,7 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public List<Plan> findAll() {
-        return planDao.findAll();
+        List<Plan> all = planDao.findAll();
+        return all;
     }
 }

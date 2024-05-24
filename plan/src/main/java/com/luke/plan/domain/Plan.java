@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Plan {
-    private Long planId;
+    private Long id;
     private String planName;
     private String status;
 }

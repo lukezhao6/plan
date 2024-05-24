@@ -1,8 +1,8 @@
 package com.luke.plan.controller;
 
+import com.luke.plan.domain.Plan;
 import com.luke.plan.services.PlanService;
 import lombok.extern.slf4j.Slf4j;
-import com.luke.plan.domain.Plan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("plan/")
 public class PlanController {
 
@@ -21,6 +21,7 @@ public class PlanController {
 
     @GetMapping("findAll")
     public List<Plan> createSuPaiOrder() {
-        return planService.findAll();
+        List<Plan> all = planService.findAll();
+        return all;
     }
 }
