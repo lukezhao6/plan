@@ -193,96 +193,49 @@
     </div>
 
     <script>
-      const data = {
-        plan: [
-          {
-            "2024年五月": {
-              第一周: [
-                {
-                  planName: "AI大模型工程师",
-                  source: "马士兵教育",
-                  schedule: "20%",
-                  target: "前六章",
-                  link: "https://www.mashibing.com/subject/167?activeNav=1",
-                  status: "待开始",
-                },
-                {
-                  planName: "樊登育儿书（唤醒孩子的内在成长）",
-                  source: "书",
-                  schedule: "30%",
-                  target: "通读一遍",
-                  link: "",
-                  status: "进行中",
-                },
-              ],
-              第二周: [
-                {
-                  planName: "AI大模型工程师1111",
-                  source: "马士兵教育1111",
-                  schedule: "100%",
-                  target: "前八章",
-                  link: "https://www.mashibing.com/subject/167?activeNav=1",
-                  status: "已完成",
-                },
-                {
-                  planName: "樊登育儿书（唤醒孩子的内在成长）",
-                  source: "书",
-                  schedule: "30%",
-                  target: "通读一遍",
-                  link: "",
-                  status: "进行中",
-                },
-              ],
-            },
-          },
-          {
-            "2024年六月": {
-              第一周: [
-                {
-                  planName: "AI大模型工程师",
-                  source: "马士兵教育",
-                  schedule: "20%",
-                  target: "前六章",
-                  link: "https://www.mashibing.com/subject/167?activeNav=1",
-                  status: "待开始",
-                },
-                {
-                  planName: "樊登育儿书（唤醒孩子的内在成长）",
-                  source: "书",
-                  schedule: "30%",
-                  target: "通读一遍",
-                  link: "",
-                  status: "进行中",
-                },
-              ],
-              第二周: [
-                {
-                  planName: "AI大模型工程师",
-                  source: "马士兵教育",
-                  schedule: "20%",
-                  target: "前六章",
-                  link: "https://www.mashibing.com/subject/167?activeNav=1",
-                  status: "待开始",
-                },
-                {
-                  planName: "樊登育儿书（唤醒孩子的内在成长）",
-                  source: "书",
-                  schedule: "30%",
-                  target: "通读一遍",
-                  link: "",
-                  status: "进行中",
-                },
-              ],
-            },
-          },
-        ],
-      };
-
+      //异步函数，用于调用 API 获取数据。
+      async function callApi() {
+        try {
+          //使用 fetch API 向指定的 URL 发送 HTTP 请求，以获取数据。
+          const response = await fetch("http://127.0.0.1:8081/plan/findAll");
+          if (!response.ok) {
+            //如果响应状态码不在 200-299 范围内，抛出一个错误。
+            throw new Error(
+              "Network response was not ok " + response.statusText
+            );
+          }
+          //将响应解析为 JSON 格式的数据
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          //捕获异常，如果发生错误，则在控制台输出错误信息
+          console.error(
+            "There has been a problem with your fetch operation:",
+            error
+          );
+        }
+      }
+      //异步函数，用于获取计划数据并进行处理
+      async function getPlanData() {
+        //调用 callApi 函数获取计划数据，并等待获取到数据
+        const planData = await callApi();
+        //如果成功获取到数据，则执行下面的代码块。
+        if (planData) {
+          //控制台打印获取到的计划数据
+          console.log(planData);
+          //调用 renderPlanData 函数，渲染获取到的计划数据
+          renderPlanData(planData);
+        }
+      }
+      //定义一个函数 createPlanElement，用于根据给定的计划数据创建 DOM 元素
       function createPlanElement(plan) {
+        //创建一个 <tr> 元素作为行元素
         const rowElement = document.createElement("tr");
-
+        //创建一个 <td> 元素作为名称单元格
         const nameCell = document.createElement("td");
+        //设置名称单元格的文本内容为计划的名称
         nameCell.textContent = plan.planName;
+        //将名称单元格添加到行元素中
         rowElement.appendChild(nameCell);
 
         const sourceCell = document.createElement("td");
@@ -291,6 +244,7 @@
 
         const progressCell = document.createElement("td");
         const progressContainer = document.createElement("div");
+        //添加类名 progress-container
         progressContainer.classList.add("progress-container");
         const progressBar = document.createElement("div");
         progressBar.classList.add("progress-bar");
@@ -302,7 +256,6 @@
         progressContainer.appendChild(progressBar);
         progressCell.appendChild(progressContainer);
         rowElement.appendChild(progressCell);
-
         const targetCell = document.createElement("td");
         targetCell.textContent = plan.target;
         rowElement.appendChild(targetCell);
@@ -401,63 +354,67 @@
         }
       }
 
-      const planContainer = document.getElementById("plan-container");
-      const monthList = document.getElementById("month-list");
+      function renderPlanData(planData) {
+        const planContainer = document.getElementById("plan-container");
+        const monthList = document.getElementById("month-list");
 
-      data.plan.forEach((monthPlans, monthIndex) => {
-        for (const month in monthPlans) {
-          const monthGroup = monthPlans[month];
-
-          const monthElement = document.createElement("li");
-          const monthLink = document.createElement("a");
-          monthLink.textContent = month;
-          monthLink.href = "#";
-          monthLink.dataset.monthIndex = monthIndex;
-          monthElement.appendChild(monthLink);
-
-          const weekList = document.createElement("ul");
-
-          for (const week in monthGroup) {
-            const weekElement = document.createElement("li");
-            const weekLink = document.createElement("a");
-            weekLink.textContent = week;
-            weekLink.href = "#";
-            weekLink.dataset.monthIndex = monthIndex;
-            weekLink.dataset.week = week;
-            weekElement.appendChild(weekLink);
-            weekList.appendChild(weekElement);
-          }
-
-          monthElement.appendChild(weekList);
-          monthList.appendChild(monthElement);
-        }
-      });
-
-      monthList.addEventListener("click", (event) => {
-        const target = event.target;
-        if (target.tagName === "A") {
-          event.preventDefault();
-          const monthIndex = target.dataset.monthIndex;
-          const week = target.dataset.week;
-
-          const monthPlans = data.plan[monthIndex];
+        planData.plan.forEach((monthPlans, monthIndex) => {
           for (const month in monthPlans) {
             const monthGroup = monthPlans[month];
-            if (week) {
-              const weekPlans = monthGroup[week];
-              const groupedPlans = groupPlansByStatus(weekPlans);
-              renderPlans(groupedPlans, planContainer);
-            } else {
-              let allPlans = [];
-              for (const week in monthGroup) {
-                allPlans = allPlans.concat(monthGroup[week]);
+
+            const monthElement = document.createElement("li");
+            const monthLink = document.createElement("a");
+            monthLink.textContent = month;
+            monthLink.href = "#";
+            monthLink.dataset.monthIndex = monthIndex;
+            monthElement.appendChild(monthLink);
+
+            const weekList = document.createElement("ul");
+
+            for (const week in monthGroup) {
+              const weekElement = document.createElement("li");
+              const weekLink = document.createElement("a");
+              weekLink.textContent = week;
+              weekLink.href = "#";
+              weekLink.dataset.monthIndex = monthIndex;
+              weekLink.dataset.week = week;
+              weekElement.appendChild(weekLink);
+              weekList.appendChild(weekElement);
+            }
+
+            monthElement.appendChild(weekList);
+            monthList.appendChild(monthElement);
+          }
+        });
+
+        monthList.addEventListener("click", (event) => {
+          const target = event.target;
+          if (target.tagName === "A") {
+            event.preventDefault();
+            const monthIndex = target.dataset.monthIndex;
+            const week = target.dataset.week;
+
+            const monthPlans = planData.plan[monthIndex];
+            for (const month in monthPlans) {
+              const monthGroup = monthPlans[month];
+              if (week) {
+                const weekPlans = monthGroup[week];
+                const groupedPlans = groupPlansByStatus(weekPlans);
+                renderPlans(groupedPlans, planContainer);
+              } else {
+                let allPlans = [];
+                for (const week in monthGroup) {
+                  allPlans = allPlans.concat(monthGroup[week]);
+                }
+                const groupedPlans = groupPlansByStatus(allPlans);
+                renderPlans(groupedPlans, planContainer);
               }
-              const groupedPlans = groupPlansByStatus(allPlans);
-              renderPlans(groupedPlans, planContainer);
             }
           }
-        }
-      });
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", getPlanData);
     </script>
   </body>
 </html>
