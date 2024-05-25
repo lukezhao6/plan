@@ -7,6 +7,7 @@
     <link rel="icon" type="image/jpg" href="./img/plan.jpg" />
     <link rel="stylesheet" href="style.css" />
   </head>
+  <!-- 详情页 -->
   <body>
     <div class="sidebar">
       <h2>超级计划</h2>
@@ -16,7 +17,60 @@
       <button id="add-plan-button">新增计划</button>
     </div>
     <div class="container" id="plan-container">
-      <!-- Plans will be dynamically inserted here -->
+      <div class="plan-group">
+        <h2>待开始</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>计划名称</th>
+              <th>来源</th>
+              <th>进度</th>
+              <th>目标</th>
+              <th>状态</th>
+              <th>链接</th>
+            </tr>
+          </thead>
+          <tbody id="plan-container-not-started">
+            <!-- Plans will be dynamically inserted here -->
+          </tbody>
+        </table>
+      </div>
+      <div class="plan-group">
+        <h2>进行中</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>计划名称</th>
+              <th>来源</th>
+              <th>进度</th>
+              <th>目标</th>
+              <th>状态</th>
+              <th>链接</th>
+            </tr>
+          </thead>
+          <tbody id="plan-container-in-progress">
+            <!-- Plans will be dynamically inserted here -->
+          </tbody>
+        </table>
+      </div>
+      <div class="plan-group">
+        <h2>已完成</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>计划名称</th>
+              <th>来源</th>
+              <th>进度</th>
+              <th>目标</th>
+              <th>状态</th>
+              <th>链接</th>
+            </tr>
+          </thead>
+          <tbody id="plan-container-completed">
+            <!-- Plans will be dynamically inserted here -->
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- 弹框模态框 -->

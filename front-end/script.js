@@ -115,41 +115,31 @@ function groupPlansByStatus(plans) {
 function renderPlans(plans, container) {
   container.innerHTML = "";
 
-  for (const status in plans) {
-    const statusGroup = plans[status];
+  //待开始
+  const tbody = document.getElementById("plan-container-not-started");
+  const plan_not_started = plans["待开始"];
+  plan_not_started.forEach((plan) => {
+    const planElement = createPlanElement(plan);
+    tbody.appendChild(planElement);
+  });
 
-    const statusElement = document.createElement("div");
-    statusElement.classList.add("plan-group");
+  //进行中
+  const tbody_in_progress = document.getElementById(
+    "plan-container-in-progress"
+  );
+  const plan_inprogress = plans["进行中"];
+  plan_inprogress.forEach((plan) => {
+    const planElement = createPlanElement(plan);
+    tbody_in_progress.appendChild(planElement);
+  });
 
-    const statusHeader = document.createElement("h2");
-    statusHeader.textContent = status;
-    statusElement.appendChild(statusHeader);
-
-    const table = document.createElement("table");
-    const thead = document.createElement("thead");
-    const headerRow = document.createElement("tr");
-
-    ["计划名称", "来源", "进度", "目标", "状态", "链接"].forEach((text) => {
-      const th = document.createElement("th");
-      th.textContent = text;
-      headerRow.appendChild(th);
-    });
-
-    thead.appendChild(headerRow);
-    table.appendChild(thead);
-
-    const tbody = document.createElement("tbody");
-
-    statusGroup.forEach((plan) => {
-      const planElement = createPlanElement(plan);
-      tbody.appendChild(planElement);
-    });
-
-    table.appendChild(tbody);
-    statusElement.appendChild(table);
-
-    container.appendChild(statusElement);
-  }
+  //已完成
+  const tbody_completed = document.getElementById("plan-container-not-started");
+  const plan_completed = plans["已完成"];
+  plan_completed.forEach((plan) => {
+    const planElement = createPlanElement(plan);
+    tbody_completed.appendChild(planElement);
+  });
 }
 function renderPlanData(planData) {
   //获取计划容器和月份列表
