@@ -112,4 +112,34 @@ public class PlanController {
         response.setHeader("Access-Control-Allow-Origin","*");
         return result;
     }
+
+
+    @GetMapping("findBar")
+    public String findBar(HttpServletResponse response){
+//        List<Plan> all = planService.findAll();
+        String result = """
+                {
+                  "2024年5月": [
+                    { "week": "第一周", "id": "1" },
+                    { "week": "第二周", "id": "2" },
+                    { "week": "第三周", "id": "3" },
+                    { "week": "第四周", "id": "4" }
+                  ],
+                  "2024年6月": [
+                    { "week": "第一周", "id": "5" },
+                    { "week": "第二周", "id": "6" },
+                    { "week": "第三周", "id": "7" },
+                    { "week": "第四周", "id": "8" }
+                  ],
+                  "2024年7月": [
+                    { "week": "第一周", "id": "9" },
+                    { "week": "第二周", "id": "10" },
+                    { "week": "第三周", "id": "11" },
+                    { "week": "第四周", "id": "12" }
+                  ]
+                }
+                """;
+        response.setHeader("Access-Control-Allow-Origin","*");
+        return result;
+    }
 }

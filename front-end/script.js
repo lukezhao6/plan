@@ -214,3 +214,54 @@ function renderPlanData(planData) {
 }
 
 document.addEventListener("DOMContentLoaded", getPlanData);
+document.addEventListener("DOMContentLoaded", () => {
+  const addPlanButton = document.getElementById("add-plan-button");
+  const modal = document.getElementById("plan-modal");
+  const closeModalButton = document.getElementById("close-modal-button");
+  const planForm = document.getElementById("plan-form");
+
+  // 打开模态框
+  addPlanButton.addEventListener("click", () => {
+    modal.style.display = "flex";
+  });
+
+  // 关闭模态框
+  closeModalButton.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  // 关闭模态框，点击模态框外部
+  window.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+
+  // 提交表单
+  planForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const planName = document.getElementById("plan-name").value;
+    const planTime = document.getElementById("plan-time").value;
+
+    fetch("http://127.0.0.1/plan/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: planName,
+        time: planTime,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("成功:", data);
+        modal.style.display = "none";
+        // 这里可以添加刷新计划列表的代码
+      })
+      .catch((error) => {
+        console.error("错误:", error);
+      });
+  });
+});
